@@ -11,7 +11,6 @@ public class OrderPay {
     private int carId;
     private int clientId;
     private String carName;
-    private String carNumber;
     private String time;
     private float price;
 
