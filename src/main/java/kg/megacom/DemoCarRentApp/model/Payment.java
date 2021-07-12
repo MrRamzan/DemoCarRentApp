@@ -21,9 +21,6 @@ public class Payment {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @Column(name = "token")
-    private String token;
-
     @Column(name = "price")
     private Float price;
 

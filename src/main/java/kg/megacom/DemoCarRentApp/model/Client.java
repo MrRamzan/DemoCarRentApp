@@ -23,8 +23,8 @@ public class Client {
     @Column(name = "firstname")
     private String firstname;
 
-    @Column(name = "secondname")
-    private String secondname;
+    @Column(name = "lastname")
+    private String lastname;
 
     @Column(name = "middlename")
     private String middlename;
@@ -48,11 +48,8 @@ public class Client {
     @Column(name = "enabled", columnDefinition = "boolean default true")
     private Boolean enabled;
 
-    @Column(name = "token")
-    private String token;
-
     @Override
     public String toString() {
-        return secondname + " " + firstname + " " + middlename;
+        return lastname + " " + firstname + " " + middlename;
     }
 }
