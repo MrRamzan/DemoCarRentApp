@@ -31,8 +31,8 @@ public class CarController {
         return carService.getAllByEnabled(enabled);
     }
 
-    @GetMapping("/getById")
-    public CarDto getById(@RequestParam Long id) {
+    @GetMapping("/getById/{id}")
+    public CarDto getById(@PathVariable Long id) {
         return carService.getAndroidCarById(id);
     }
 
@@ -41,9 +41,9 @@ public class CarController {
         return carService.saveCar(carDto);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteCar(@RequestParam Long id, @RequestBody CarDto carDto) {
-        carService.deleteCar(id, carDto);
+    @DeleteMapping("/delete/{id}")
+    public int deleteCar(@PathVariable(value = "id") Long id) {
+        return carService.deleteCar(id);
     }
 
     @GetMapping("/getBySeatsCount")
@@ -64,5 +64,15 @@ public class CarController {
     @GetMapping("/getByTransmission")
     public List<CarDto> getByTransmission (@RequestParam String transmission) {
         return carService.findByTransmission(transmission);
+    }
+
+    @PutMapping("/activateCar/{id}")
+    public int activateCar (@PathVariable(value = "id") Long id){
+        return carService.activateCar(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public CarDto updateCar (@PathVariable Long id, @RequestBody CarDto carDto){
+        return carService.updateCar(id, carDto);
     }
 }

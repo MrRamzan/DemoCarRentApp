@@ -16,7 +16,7 @@ public interface CarService {
 
     CarDto saveCar(CarDto carDto);
 
-    void deleteCar(Long id, CarDto carDto);
+    int deleteCar(Long id);
 
     List<CarDto> findBySeatsCount(int seats);
 
@@ -25,4 +25,9 @@ public interface CarService {
     List<CarDto> findByDoorsCount(int doors);
 
     List<CarDto> findByTransmission(String transmission);
+
+    int activateCar (Long id);
+
+    CarDto updateCar (Long id, CarDto carDto);
+
 }

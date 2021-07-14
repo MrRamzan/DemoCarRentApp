@@ -13,8 +13,9 @@ public interface ClientService {
     ClientDto getByMail(String email);
     ClientDto getByTelephone(String telephone);
     ClientDto getById(Long id);
-    void saveClient(ClientDto clientDto);
-    void deleteClient (boolean activated);
-    ClientDto update (ClientDto clientDto);
+    ClientDto saveClient(ClientDto clientDto);
+    int deleteClient (Long id);
+    ClientDto update (Long id, ClientDto clientDto);
+    int activatedClient (Long id);
 
 }

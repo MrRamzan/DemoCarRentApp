@@ -5,7 +5,6 @@ import kg.megacom.DemoCarRentApp.mappers.CarMapper;
 import kg.megacom.DemoCarRentApp.model.Car;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
 import kg.megacom.DemoCarRentApp.service.CarService;
-import org.hibernate.hql.internal.ast.tree.TableReferenceNode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,13 +57,14 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void deleteCar(Long id, CarDto carDto) {
-        Car car = CarMapper.INSTANCE.toCar(carDto);
+    public int deleteCar(Long id) {
         if (carRepository.existsById(id)) {
             Car car1 = carRepository.getById(id);
-            car1.setEnabled(car.getEnabled());
+            car1.setEnabled(false);
             carRepository.save(car1);
+            return 1;
         }
+        return 0;
     }
 
     @Override
@@ -94,4 +94,35 @@ public class CarServiceImpl implements CarService {
         List<CarDto> carDtoList = CarMapper.INSTANCE.toCarDtoList(cars);
         return carDtoList;
     }
+
+    @Override
+    public int activateCar(Long id) {
+        if (carRepository.existsById(id)) {
+            Car car1 = carRepository.getById(id);
+            car1.setEnabled(true);
+            carRepository.save(car1);
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public CarDto updateCar(Long id, CarDto carDto) {
+        Car car = CarMapper.INSTANCE.toCar(carDto);
+        if (carRepository.existsById(id)) {
+           Car car1 = carRepository.getById(id);
+            car1.setModel(car.getModel());
+            car1.setCategory(car.getCategory());
+            car1.setCarDescription(car.getCarDescription());
+            car1.setDoors(car.getDoors());
+            car1.setLuggage(car.getLuggage());
+            car1.setYear(car.getYear());
+            car1.setTariff(car.getTariff());
+            car1.setSeats(car.getSeats());
+            carRepository.save(car1);
+            return CarMapper.INSTANCE.toCarDto(car1);
+       }
+        throw new RuntimeException("Car not found");
+    }
+
 }
