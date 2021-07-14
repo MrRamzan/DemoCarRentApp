@@ -11,11 +11,11 @@ import java.util.List;
 public interface TariffMapper {
     TariffMapper INSTANCE = Mappers.getMapper(TariffMapper.class);
 
-    Tariff toDto(Tariff tariff);
+    TariffDto toDto(Tariff tariff);
 
-    TariffDto toTariff(TariffDto tariffDto);
+    Tariff toTariff(TariffDto tariffDto);
 
-    List<Tariff> toDtoList(List<Tariff> tariffList);
+    List<TariffDto> toDtoList(List<Tariff> tariffList);
 
-    List<TariffDto> toTariffList(List<TariffDto> tariffDtoList);
+    List<Tariff> toTariffList(List<TariffDto> tariffDtoList);
 }

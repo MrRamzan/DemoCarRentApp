@@ -13,6 +13,6 @@ public class OrderDataDto {
     private Date end;
     private Boolean ended;
     private Float price;
-    private OrderDto orderDto;
+    private OrderDto order;
 
 }

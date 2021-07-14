@@ -12,11 +12,11 @@ public interface CategoryMapper {
 
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
-    Category toCategoryDto(Category category);
+    CategoryDto toCategoryDto(Category category);
 
-    CategoryDto toCategory(CategoryDto categoryDto);
+    Category toCategory(CategoryDto categoryDto);
 
-    List<Category> toCategoryDtoList(List<Category> categoryList);
+    List<CategoryDto> toCategoryDtoList(List<Category> categoryList);
 
-    List<CategoryDto> toCategoryList(List<CategoryDto> categoryDtoList);
+    List<Category> toCategoryList(List<CategoryDto> categoryDtoList);
 }

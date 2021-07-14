@@ -12,6 +12,6 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> getAllByActivated(boolean activated);
     List<Client> getAllByEnabled(boolean enabled);
     List<Client> getAllByActivatedAndEnabled(boolean activated, boolean enabled);
-    Client getClientByMail(String email);
+    Client getClientByEmail(String email);
     Client getClientByTelephone(String telephone);
 }

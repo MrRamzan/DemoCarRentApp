@@ -11,11 +11,11 @@ import java.util.List;
 public interface PaymentMapper {
     PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
 
-    Payment toDto(Payment payment);
+    PaymentDto toDto(Payment payment);
 
-    PaymentDto toPayment(PaymentDto paymentDto);
+    Payment toPayment(PaymentDto paymentDto);
 
-    List<Payment> toDtoList(List<Payment> paymentList);
+    List<PaymentDto> toDtoList(List<Payment> paymentList);
 
-    List<PaymentDto> toPaymentList(List<PaymentDto> paymentDtoList);
+    List<Payment> toPaymentList(List<PaymentDto> paymentDtoList);
 }

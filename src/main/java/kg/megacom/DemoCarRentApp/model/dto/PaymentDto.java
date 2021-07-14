@@ -10,5 +10,6 @@ public class PaymentDto {
     private Long id;
     private Date date;
     private Float price;
-    private OrderDto orderDto;
+    private OrderDto order;
+
 }

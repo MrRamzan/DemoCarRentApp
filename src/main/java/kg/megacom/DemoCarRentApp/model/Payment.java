@@ -26,5 +26,5 @@ public class Payment {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_order", nullable = false)
-    private Order order;
+    private Orders orders;
 }

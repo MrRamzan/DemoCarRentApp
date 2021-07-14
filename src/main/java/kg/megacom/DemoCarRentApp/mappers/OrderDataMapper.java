@@ -12,11 +12,11 @@ public interface OrderDataMapper {
 
     OrderDataMapper INSTENCE = Mappers.getMapper(OrderDataMapper.class);
 
-    OrderData toDto(OrderData orderData);
+    OrderDataDto toDto(OrderData orderData);
 
-    OrderDataDto toOrderData(OrderDataDto orderDataDto);
+    OrderData toOrderData(OrderDataDto orderDataDto);
 
-    List<OrderData> toDtoList(List<OrderData> orderDataList);
+    List<OrderDataDto> toDtoList(List<OrderData> orderDataList);
 
-    List<OrderDataDto> toOrderDataList(List<OrderDataDto> orderDataDtoList);
+    List<OrderData> toOrderDataList(List<OrderDataDto> orderDataDtoList);
 }

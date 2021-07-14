@@ -1,6 +1,6 @@
 package kg.megacom.DemoCarRentApp.mappers;
 
-import kg.megacom.DemoCarRentApp.model.Order;
+import kg.megacom.DemoCarRentApp.model.Orders;
 import kg.megacom.DemoCarRentApp.model.dto.OrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -12,11 +12,11 @@ public interface OrderMapper {
 
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-    Order toDto(Order order);
+    OrderDto toDto(Orders order);
 
-    OrderDto toOrder(OrderDto orderDto);
+    Orders toOrder(OrderDto orderDto);
 
-    List<Order> toDtoList(List<Order> orderList);
+    List<OrderDto> toDtoList(List<Orders> orderList);
 
-    List<OrderDto> toOrderList(List<OrderDto> orderDtoList);
+    List<Orders> toOrderList(List<OrderDto> orderDtoList);
 }

@@ -14,8 +14,8 @@ public class OrderDto {
     private Boolean blocked;
     private Boolean ended;
     private CarDto carDto;
-    private ClientDto clientDto;
-    private List<OrderDataDto> orderDataDto;
-    private PaymentDto paymentDto;
+    private ClientDto client;
+    private List<OrderDataDto> orderData;
+    private PaymentDto payment;
 
 }

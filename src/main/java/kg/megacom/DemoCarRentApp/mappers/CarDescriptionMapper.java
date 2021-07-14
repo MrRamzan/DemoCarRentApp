@@ -12,11 +12,11 @@ public interface CarDescriptionMapper {
 
     CarDescriptionMapper INSTANCE = Mappers.getMapper(CarDescriptionMapper.class);
 
-    CarDescription toCarDescriptDto(CarDescription carDescription);
+    CarDescriptionDto toCarDescriptDto(CarDescription carDescription);
 
-    CarDescriptionDto toCarDescription(CarDescriptionDto carDescriptionDto);
+    CarDescription toCarDescription(CarDescriptionDto carDescriptionDto);
 
-    List<CarDescription> toCarDescriptDtoList(List<CarDescription> carDescriptionList);
+    List<CarDescriptionDto> toCarDescriptDtoList(List<CarDescription> carDescriptionList);
 
-    List<CarDescriptionDto> toCarDescriptionList(List<CarDescriptionDto> carDescriptionDtoList);
+    List<CarDescription> toCarDescriptionList(List<CarDescriptionDto> carDescriptionDtoList);
 }

@@ -12,11 +12,11 @@ public interface ClientMapper {
 
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
-    Client toClientDto(Client client);
+    ClientDto toClientDto(Client client);
 
-    ClientDto toClient(ClientDto clientDto);
+    Client toClient(ClientDto clientDto);
 
-    List<Client> toClientDtoList(List<Client> clientList);
+    List<ClientDto> toClientDtoList(List<Client> clientList);
 
-    List<ClientDto> toClientList(List<ClientDto> clientDtoList);
+    List<Client> toClientList(List<ClientDto> clientDtoList);
 }

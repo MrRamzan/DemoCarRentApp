@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order_data")
 public class OrderData {
 
     @Id
@@ -34,6 +33,6 @@ public class OrderData {
     private Float price;
 
     @ManyToOne
-    @JoinColumn(name = "id_order")
-    private Order order;
+    @JoinColumn(name = "id_orders")
+    private Orders orders;
 }

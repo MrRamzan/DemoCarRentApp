@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,9 +46,9 @@ public class Order {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY)
     private List<OrderData> orderData;
 
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "orders", fetch = FetchType.EAGER)
     private Payment payment;
 }
