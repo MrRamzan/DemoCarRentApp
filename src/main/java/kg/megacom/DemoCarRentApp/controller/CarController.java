@@ -1,5 +1,6 @@
 package kg.megacom.DemoCarRentApp.controller;
 
+import kg.megacom.DemoCarRentApp.model.Car;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
 import kg.megacom.DemoCarRentApp.service.CarService;
 import org.springframework.web.bind.annotation.*;
@@ -21,20 +22,16 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    @GetMapping("/getRented")
-    public List<CarDto> getAllRented(@RequestParam boolean rented) {
-        return carService.getAllByRented(rented);
-    }
-
-    @GetMapping("/getEnabled")
-    public List<CarDto> getAllByEnabled(@RequestParam boolean enabled) {
-        return carService.getAllByEnabled(enabled);
-    }
-
     @GetMapping("/getById/{id}")
-    public CarDto getById(@PathVariable Long id) {
-        return carService.getAndroidCarById(id);
+    public CarDto findById(@PathVariable Long id) {
+        return carService.getCarById(id);
     }
+
+    @GetMapping("/getByCategory")
+    public List<CarDto> getByCategory(@RequestParam String categoryName) {
+        return carService.findByCategory(categoryName);
+    }
+
 
     @PostMapping("/save")
     public CarDto saveCar(@RequestBody CarDto carDto) {
@@ -62,17 +59,17 @@ public class CarController {
     }
 
     @GetMapping("/getByTransmission")
-    public List<CarDto> getByTransmission (@RequestParam String transmission) {
+    public List<CarDto> getByTransmission(@RequestParam String transmission) {
         return carService.findByTransmission(transmission);
     }
 
     @PutMapping("/activateCar/{id}")
-    public int activateCar (@PathVariable(value = "id") Long id){
+    public int activateCar(@PathVariable(value = "id") Long id) {
         return carService.activateCar(id);
     }
 
     @PutMapping("/update/{id}")
-    public CarDto updateCar (@PathVariable Long id, @RequestBody CarDto carDto){
+    public CarDto updateCar(@PathVariable Long id, @RequestBody CarDto carDto) {
         return carService.updateCar(id, carDto);
     }
 }

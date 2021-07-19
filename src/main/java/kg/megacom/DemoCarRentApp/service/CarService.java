@@ -6,17 +6,15 @@ import java.util.List;
 
 public interface CarService {
 
-    List<CarDto> getAllByRented(boolean rented);
-
     List<CarDto> getAllCars();
 
-    List<CarDto> getAllByEnabled(boolean enabled);
-
-    CarDto getAndroidCarById(Long id);
+    CarDto getCarById(Long id);
 
     CarDto saveCar(CarDto carDto);
 
     int deleteCar(Long id);
+
+    int activateCar(Long id);
 
     List<CarDto> findBySeatsCount(int seats);
 
@@ -26,8 +24,8 @@ public interface CarService {
 
     List<CarDto> findByTransmission(String transmission);
 
-    int activateCar (Long id);
+    CarDto updateCar(Long id, CarDto carDto);
 
-    CarDto updateCar (Long id, CarDto carDto);
+    List<CarDto> findByCategory (String categoryName);
 
 }

@@ -1,6 +1,7 @@
 package kg.megacom.DemoCarRentApp.service.impl;
 
 import kg.megacom.DemoCarRentApp.dao.ClientRepository;
+import kg.megacom.DemoCarRentApp.exceptions.ClientException;
 import kg.megacom.DemoCarRentApp.mappers.ClientMapper;
 import kg.megacom.DemoCarRentApp.model.Client;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
@@ -18,19 +19,6 @@ public class ClientServiceImpl implements ClientService {
         this.clientRepository = clientRepository;
     }
 
-
-    @Override
-    public List<ClientDto> getAllByActivated(boolean activated) {
-        List<Client> clientList = clientRepository.getAllByActivated(activated);
-        return ClientMapper.INSTANCE.toClientDtoList(clientList);
-    }
-
-    @Override
-    public List<ClientDto> getAllByEnabled(boolean enabled) {
-        List<Client> clientList = clientRepository.getAllByEnabled(enabled);
-        return ClientMapper.INSTANCE.toClientDtoList(clientList);
-    }
-
     @Override
     public List<ClientDto> getAllClients() {
        List<Client> clients = clientRepository.findAll();
@@ -38,16 +26,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDto> getAllByActivatedAndEnabled(boolean activated, boolean enabled) {
-        List<Client> clients = clientRepository.getAllByActivatedAndEnabled(activated, enabled);
-        return ClientMapper.INSTANCE.toClientDtoList(clients);
-    }
-
-    @Override
     public ClientDto getByMail(String email) {
         Client client = clientRepository.getClientByEmail(email);
         if (client == null){
-            throw new RuntimeException("Client with this email was not found");
+            throw new ClientException("Client with this email was not found");
         }
 
         return ClientMapper.INSTANCE.toClientDto(client);
@@ -56,7 +38,10 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDto getByTelephone(String telephone) {
         Client client = clientRepository.getClientByTelephone(telephone);
-        return ClientMapper.INSTANCE.toClientDto(client);
+        if (client !=null) {
+            return ClientMapper.INSTANCE.toClientDto(client);
+        }
+       throw new ClientException("Client with this telephone was not found");
     }
 
     @Override
@@ -76,7 +61,7 @@ public class ClientServiceImpl implements ClientService {
     public int deleteClient(Long id) {
         if (clientRepository.existsById(id)){
             Client client1 = clientRepository.getById(id);
-            client1.setActivated(false);
+            client1.setActiveStatus(false);
             clientRepository.save(client1);
             return 1;
         }
@@ -87,7 +72,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto update(Long id, ClientDto clientDto) {
         Client client = clientRepository.findById(clientDto.getId()).orElse(null);
         if (client == null) {
-            throw new RuntimeException("Client not found");
+            throw new ClientException("Client with this ID was not found");
         }
         client.setFirstname(clientDto.getFirstname());
         client.setLastname(clientDto.getLastname());
@@ -100,10 +85,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public int activatedClient(Long id) {
+    public int activateClient(Long id) {
         if (clientRepository.existsById(id)){
             Client client1 = clientRepository.getById(id);
-            client1.setActivated(true);
+            client1.setActiveStatus(true);
             clientRepository.save(client1);
             return 1;
         }

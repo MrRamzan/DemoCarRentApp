@@ -2,13 +2,14 @@ package kg.megacom.DemoCarRentApp.model.dto;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class TariffDto {
 
     private Long id;
-    private String name;
-    private Float payRent;
-    private Float payBooking;
-    private int freeBookingMin;
-    private Boolean enabled;
+    private double price;
+    private Date priceStart;
+    private Date priceEnd;
+    private CarDto car;
 }

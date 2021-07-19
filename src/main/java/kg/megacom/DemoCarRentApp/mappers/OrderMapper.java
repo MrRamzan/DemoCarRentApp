@@ -12,7 +12,7 @@ public interface OrderMapper {
 
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-    OrderDto toDto(Orders order);
+    OrderDto toDto(Orders orders);
 
     Orders toOrder(OrderDto orderDto);
 

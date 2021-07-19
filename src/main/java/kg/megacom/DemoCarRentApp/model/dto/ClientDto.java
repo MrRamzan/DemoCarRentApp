@@ -12,10 +12,9 @@ public class ClientDto {
     private String lastname;
     private String middlename;
     private String email;
+    private String password;
     private Date registrationDate;
     private String telephone;
-    private String password;
-    private Boolean activated;
-    private Boolean enabled;
+    private Boolean activeStatus;
 
 }

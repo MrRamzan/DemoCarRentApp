@@ -1,6 +1,7 @@
 package kg.megacom.DemoCarRentApp.service.impl;
 
 import kg.megacom.DemoCarRentApp.dao.CarRepository;
+import kg.megacom.DemoCarRentApp.exceptions.CarException;
 import kg.megacom.DemoCarRentApp.mappers.CarMapper;
 import kg.megacom.DemoCarRentApp.model.Car;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
@@ -19,34 +20,19 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDto> getAllByRented(boolean rented) {
-        List<Car> cars = carRepository.getAllByRented(rented);
-        List<CarDto> carDtos = CarMapper.INSTANCE.toCarDtoList(cars);
-        return carDtos;
-    }
-
-    @Override
     public List<CarDto> getAllCars() {
         List<Car> carList = carRepository.findAll();
-        System.out.println(carList);
-        List<CarDto> carDtoList = CarMapper.INSTANCE.toCarDtoList(carList);
-        System.out.println(carDtoList);
-        return carDtoList;
+        return CarMapper.INSTANCE.toCarDtoList(carList);
 
     }
 
     @Override
-    public List<CarDto> getAllByEnabled(boolean enabled) {
-        List<Car> cars = carRepository.getAllByEnabled(enabled);
-        List<CarDto> carDtos = CarMapper.INSTANCE.toCarDtoList(cars);
-        return carDtos;
-    }
-
-    @Override
-    public CarDto getAndroidCarById(Long id) {
+    public CarDto getCarById(Long id) {
         Car car = carRepository.findById(id).orElse(null);
-        CarDto carDto = CarMapper.INSTANCE.toCarDto(car);
-        return carDto;
+        if (car != null){
+            return CarMapper.INSTANCE.toCarDto(car);
+        }
+        throw new CarException("There is no such machine");
     }
 
     @Override
@@ -60,7 +46,7 @@ public class CarServiceImpl implements CarService {
     public int deleteCar(Long id) {
         if (carRepository.existsById(id)) {
             Car car1 = carRepository.getById(id);
-            car1.setEnabled(false);
+            car1.setActiveStatus(false);
             carRepository.save(car1);
             return 1;
         }
@@ -99,7 +85,7 @@ public class CarServiceImpl implements CarService {
     public int activateCar(Long id) {
         if (carRepository.existsById(id)) {
             Car car1 = carRepository.getById(id);
-            car1.setEnabled(true);
+            car1.setActiveStatus(true);
             carRepository.save(car1);
             return 1;
         }
@@ -117,12 +103,19 @@ public class CarServiceImpl implements CarService {
             car1.setDoors(car.getDoors());
             car1.setLuggage(car.getLuggage());
             car1.setYear(car.getYear());
-            car1.setTariff(car.getTariff());
             car1.setSeats(car.getSeats());
             carRepository.save(car1);
             return CarMapper.INSTANCE.toCarDto(car1);
        }
-        throw new RuntimeException("Car not found");
+        throw new CarException("Car not found");
     }
 
+    @Override
+    public List<CarDto> findByCategory(String categoryName) {
+        List<Car> carList = carRepository.findByCarCategory(categoryName);
+        if (carList != null){
+            return CarMapper.INSTANCE.toCarDtoList(carList);
+        }
+        throw new CarException("This category was not found");
+    }
 }

@@ -16,24 +16,9 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @GetMapping("/getAllByActivated")
-    public List<ClientDto> getAllByActivated(@RequestParam boolean activated) {
-        return clientService.getAllByActivated(activated);
-    }
-
-    @GetMapping("/getAllByEnabled")
-    public List<ClientDto> getAllByEnabled(@RequestParam boolean enabled) {
-        return clientService.getAllByEnabled(enabled);
-    }
-
     @GetMapping("/getAll")
     public List<ClientDto> findAllClient() {
         return clientService.getAllClients();
-    }
-
-    @GetMapping("/getAllByActivatedAndEnabled")
-    public List<ClientDto> getAllByActivatedAndEnabled(@RequestParam boolean activated, @RequestParam boolean enabled) {
-        return clientService.getAllByActivatedAndEnabled(activated, enabled);
     }
 
     @GetMapping("/getByMail")
@@ -68,6 +53,6 @@ public class ClientController {
 
     @PutMapping("/activated/{id}")
     public int activated (@PathVariable Long id) {
-        return clientService.activatedClient(id);
+        return clientService.activateClient(id);
     }
 }

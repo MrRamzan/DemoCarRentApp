@@ -1,9 +1,8 @@
 package kg.megacom.DemoCarRentApp.dao;
 
-import kg.megacom.DemoCarRentApp.model.Car;
-import kg.megacom.DemoCarRentApp.model.Client;
 import kg.megacom.DemoCarRentApp.model.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,9 +10,10 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-    List<Orders> findAllByEnded(boolean ended);
-    List<Orders> findAllByCar(Car car);
-    List<Orders> findAllByClient(Client client);
-    Orders findByClientAndEnded(Client client, boolean ended);
+    @Query(value = "SELECT * FROM orders o INNER JOIN client cl ON cl.id = o.id_client WHERE cl.email = ?", nativeQuery = true)
+    List<Orders> findAllByClient(String email);
+
+    @Query(value = "SELECT * FROM orders o INNER JOIN client cl ON cl.id = o.id_client WHERE cl.email = ?1 and o.ended =?2", nativeQuery = true)
+    Orders findByClientAndEnded(String email, boolean ended);
 
 }

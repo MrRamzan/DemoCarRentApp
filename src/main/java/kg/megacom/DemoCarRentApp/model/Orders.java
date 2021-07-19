@@ -1,17 +1,12 @@
 package kg.megacom.DemoCarRentApp.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Orders {
 
     @Id
@@ -26,29 +21,23 @@ public class Orders {
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
-    @Column(name = "blocked")
-    private Boolean blocked;
-
     @Column(name = "ended")
     private Boolean ended;
 
-    @Transient
-    private String bookingTime, rentTime;
-
-    @Transient
-    private Float price;
+    @Column(name = "total_sum")
+    private double totalSum;
 
     @ManyToOne
-    @JoinColumn(name = "id_car", nullable = false)
+    @JoinColumn(name = "id_location")
+    private Locations location;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cars", nullable = false)
     private Car car;
 
     @ManyToOne
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
-    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY)
-    private List<OrderData> orderData;
-
-    @OneToOne(mappedBy = "orders", fetch = FetchType.EAGER)
-    private Payment payment;
+    private String comment;
 }

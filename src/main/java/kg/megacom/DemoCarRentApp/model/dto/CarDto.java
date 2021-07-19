@@ -12,7 +12,7 @@ public class CarDto {
     private int doors;
     private int luggage;
     private int seats;
+    private Boolean activeStatus;
     private CarDescriptionDto carDescription;
-    private TariffDto tariff;
 
 }
