@@ -1,7 +1,7 @@
 package kg.megacom.DemoCarRentApp.service.impl;
 
 import kg.megacom.DemoCarRentApp.dao.CarRepository;
-import kg.megacom.DemoCarRentApp.exceptions.CarException;
+import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.CarMapper;
 import kg.megacom.DemoCarRentApp.model.Car;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
@@ -32,7 +32,7 @@ public class CarServiceImpl implements CarService {
         if (car != null){
             return CarMapper.INSTANCE.toCarDto(car);
         }
-        throw new CarException("There is no such machine");
+        throw new GeneralException("There is no such machine");
     }
 
     @Override
@@ -107,7 +107,7 @@ public class CarServiceImpl implements CarService {
             carRepository.save(car1);
             return CarMapper.INSTANCE.toCarDto(car1);
        }
-        throw new CarException("Car not found");
+        throw new GeneralException("Car not found");
     }
 
     @Override
@@ -116,6 +116,6 @@ public class CarServiceImpl implements CarService {
         if (carList != null){
             return CarMapper.INSTANCE.toCarDtoList(carList);
         }
-        throw new CarException("This category was not found");
+        throw new GeneralException("This category was not found");
     }
 }
