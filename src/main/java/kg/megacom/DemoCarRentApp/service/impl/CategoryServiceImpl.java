@@ -1,7 +1,7 @@
 package kg.megacom.DemoCarRentApp.service.impl;
 
 import kg.megacom.DemoCarRentApp.dao.CategoryRepository;
-import kg.megacom.DemoCarRentApp.exceptions.CarException;
+import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.CategoryMapper;
 import kg.megacom.DemoCarRentApp.model.Category;
 import kg.megacom.DemoCarRentApp.model.dto.CategoryDto;
@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (category != null) {
             return CategoryMapper.INSTANCE.toCategoryDto(category);
         }
-        throw new CarException(" Category not found");
+        throw new GeneralException(" Category not found");
     }
 
     @Override
@@ -59,6 +59,6 @@ public class CategoryServiceImpl implements CategoryService {
             category = categoryRepository.save(category);
             return CategoryMapper.INSTANCE.toCategoryDto(category);
         }
-        throw new CarException("The category has not been updated");
+        throw new GeneralException("The category has not been updated");
     }
 }
