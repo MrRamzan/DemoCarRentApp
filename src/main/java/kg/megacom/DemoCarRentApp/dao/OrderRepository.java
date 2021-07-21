@@ -16,4 +16,6 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = "SELECT * FROM orders o INNER JOIN client cl ON cl.id = o.id_client WHERE cl.email = ?1 and o.ended =?2", nativeQuery = true)
     Orders findByClientAndEnded(String email, boolean ended);
 
+    List<Orders> findAllByEnded(boolean ended);
+
 }

@@ -36,7 +36,7 @@ public class Orders {
     private Car car;
 
     @ManyToOne
-    @JoinColumn(name = "id_client", nullable = false)
+    @JoinColumn(name = "id_client")
     private Client client;
 
     private String comment;

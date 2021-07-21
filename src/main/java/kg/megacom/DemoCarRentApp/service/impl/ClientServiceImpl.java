@@ -4,10 +4,12 @@ import kg.megacom.DemoCarRentApp.dao.ClientRepository;
 import kg.megacom.DemoCarRentApp.exceptions.ClientException;
 import kg.megacom.DemoCarRentApp.mappers.ClientMapper;
 import kg.megacom.DemoCarRentApp.model.Client;
+import kg.megacom.DemoCarRentApp.model.Orders;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
 import kg.megacom.DemoCarRentApp.service.ClientService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,9 +31,11 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto getByMail(String email) {
         Client client = clientRepository.getClientByEmail(email);
         if (client == null){
-            throw new ClientException("Client with this email was not found");
+            return null;
+            //throw new ClientException("Client with this email was not found");
+//            Client client1 = new Client();
+//            return ClientMapper.INSTANCE.toClientDto(client1);
         }
-
         return ClientMapper.INSTANCE.toClientDto(client);
     }
 

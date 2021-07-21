@@ -14,5 +14,6 @@ public class CarDto {
     private int seats;
     private Boolean activeStatus;
     private CarDescriptionDto carDescription;
+    private TariffDto tariff;
 
 }
