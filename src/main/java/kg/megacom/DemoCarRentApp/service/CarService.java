@@ -26,6 +26,8 @@ public interface CarService {
 
     CarDto updateCar(Long id, CarDto carDto);
 
-    List<CarDto> findByCategory (String categoryName);
+    List<CarDto> findByCategory(String categoryName);
+
+    List<CarDto> orderByCategory();
 
 }

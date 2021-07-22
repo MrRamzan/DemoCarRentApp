@@ -20,7 +20,7 @@ public class Car {
     @JoinColumn(name = "id_category", nullable = false)
     private Category category;
 
-    private String year;
+    private int year;
     private String model;
     private int doors;
     private int luggage;

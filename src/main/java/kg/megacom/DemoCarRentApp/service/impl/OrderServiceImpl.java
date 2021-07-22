@@ -13,7 +13,6 @@ import kg.megacom.DemoCarRentApp.model.android.CarData;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
 import kg.megacom.DemoCarRentApp.model.dto.OrderDto;
-import kg.megacom.DemoCarRentApp.model.dto.TariffDto;
 import kg.megacom.DemoCarRentApp.service.CarService;
 import kg.megacom.DemoCarRentApp.service.ClientService;
 import kg.megacom.DemoCarRentApp.service.OrderService;
@@ -46,8 +45,8 @@ public class OrderServiceImpl implements OrderService {
         Car car = CarMapper.INSTANCE.toCar(carDto);
         ClientDto clientDto = clientService.getByMail(carData.getEmail());
         Client client = ClientMapper.INSTANCE.toClient(clientDto);
-        System.out.println(client);
-        if (client == null) {
+        if (client == null && car.getAction() != Action.RENT) {
+            // создаем нового клиента
             Client client1 = new Client();
             client1.setFirstname(carData.getName());
             client1.setLastname(carData.getLastName());
@@ -59,13 +58,18 @@ public class OrderServiceImpl implements OrderService {
             String random = String.valueOf(rd);
             client1.setPassword(random);
             ClientDto clientDto1 = clientService.saveClient(ClientMapper.INSTANCE.toClientDto(client1));
-            System.out.println("save " + clientDto1);
+
+            // создаем новый заказ
             Orders orders = new Orders();
             orders.setCar(car);
             orders.setClient(ClientMapper.INSTANCE.toClient(clientDto1));
-            orders.setLocation(carData.getPickup());
-            orders.setLocation(carData.getReturnPlace());
-            orders.getCar().setAction(Action.RENT);
+            orders.setPickUpLocation(carData.getPickup());
+            orders.setReturnLocation(carData.getReturnPlace());
+
+            //меняем статус авто на прокат
+            car.setAction(Action.RENT);
+            carService.updateCar(carData.getCarId(), carDto);
+
             orders.setComment(carData.getComment());
 
             //  ******************* Parse Date *****************
@@ -87,7 +91,6 @@ public class OrderServiceImpl implements OrderService {
                 long difference = Math.abs(date1.getTime() - date2.getTime());
                 long differenceDates = difference / (24 * 60 * 60 * 1000);
                 orders.setTotalSum(car.getTariff().getPrice() * differenceDates);
-                System.out.println(differenceDates);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -95,7 +98,8 @@ public class OrderServiceImpl implements OrderService {
             orders.setEnded(false);
             orders = orderRepository.save(orders);
             return OrderMapper.INSTANCE.toDto(orders);
-        } else {
+
+        } else if (client != null && car.getAction() != Action.RENT) {
             Orders orders = new Orders();
             orders.setCar(car);
             orders.setClient(client);
@@ -124,14 +128,17 @@ public class OrderServiceImpl implements OrderService {
                 e.printStackTrace();
             }
 
-            orders.setLocation(carData.getPickup());
-            orders.setLocation(carData.getReturnPlace());
-            orders.getCar().setAction(Action.RENT);
+            orders.setPickUpLocation(carData.getPickup());
+            orders.setReturnLocation(carData.getReturnPlace());
+            car.setAction(Action.RENT);
+            carService.updateCar(carData.getCarId(), CarMapper.INSTANCE.toCarDto(car));
+
             orders.setComment(carData.getComment());
             orders.setEnded(false);
             orders = orderRepository.save(orders);
             return OrderMapper.INSTANCE.toDto(orders);
         }
+        throw new GeneralException("ORDERS WAS NOT SAVED, BECAUSE CAR WAS RENTED");
     }
 
     @Override
@@ -142,11 +149,10 @@ public class OrderServiceImpl implements OrderService {
             Client client = ClientMapper.INSTANCE.toClient(clientService.getByMail(carData.getEmail()));
             orders.setCar(car);
             orders.setClient(client);
-            orders.setComment(carData.getComment());
             orders.setStart(carData.getPickUpDate());
             orders.setEnd(carData.getReturnDate());
-            orders.setLocation(carData.getPickup());
-            orders.setLocation(carData.getReturnPlace());
+            orders.setPickUpLocation(carData.getPickup());
+            orders.setReturnLocation(carData.getReturnPlace());
             orders = orderRepository.save(orders);
             return OrderMapper.INSTANCE.toDto(orders);
         }
@@ -181,13 +187,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto getCurrentOrderByClientID(ClientDto clientDto) {
-        Client client = ClientMapper.INSTANCE.toClient(clientService.getById(clientDto.getId()));
+    public OrderDto findByClientAndEnded(String email, boolean ended) {
+        Orders orders = orderRepository.findByClientAndEnded(email, ended);
+        return OrderMapper.INSTANCE.toDto(orders);
+    }
+
+    //  получение текущего заказа по ID клиента
+    @Override
+    public OrderDto getCurrentOrderByClientID(Long id) {
+        Client client = ClientMapper.INSTANCE.toClient(clientService.getById(id));
         Orders orders = orderRepository.findByClientAndEnded(client.getEmail(), false);
         if (orders != null) {
             return OrderMapper.INSTANCE.toDto(orders);
         }
         return null;
     }
+
+    @Override
+    public OrderDto finishOrder(Long id) {
+        Orders orders = OrderMapper.INSTANCE.toOrder(getCurrentOrderByClientID(id));
+        if (!orders.getEnded()) {
+            Car car = orders.getCar();
+            car.setAction(Action.AVAILABLE);
+            carService.saveCar(CarMapper.INSTANCE.toCarDto(car));
+
+            orders.setEnd(orders.getEnd());
+            orders.setEnded(true);
+            orders.setReturnLocation(orders.getReturnLocation());
+            orders.setPickUpLocation(orders.getPickUpLocation());
+            orders.setTotalSum(orders.getTotalSum());
+            orderRepository.save(orders);
+            return OrderMapper.INSTANCE.toDto(orders);
+        }
+        return null;
+    }
+
 
 }

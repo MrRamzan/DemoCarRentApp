@@ -3,8 +3,10 @@ package kg.megacom.DemoCarRentApp.service.impl;
 import kg.megacom.DemoCarRentApp.dao.CarRepository;
 import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.CarMapper;
+import kg.megacom.DemoCarRentApp.model.Action;
 import kg.megacom.DemoCarRentApp.model.Car;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
+import kg.megacom.DemoCarRentApp.service.CarDescriptionService;
 import kg.megacom.DemoCarRentApp.service.CarService;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.List;
 public class CarServiceImpl implements CarService {
 
     private CarRepository carRepository;
+    private CarDescriptionService carDescriptionService;
 
-    public CarServiceImpl(CarRepository carRepository) {
+    public CarServiceImpl(CarRepository carRepository, CarDescriptionService carDescriptionService) {
         this.carRepository = carRepository;
+        this.carDescriptionService = carDescriptionService;
     }
 
     @Override
@@ -29,7 +33,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDto getCarById(Long id) {
         Car car = carRepository.findById(id).orElse(null);
-        if (car != null){
+        if (car != null) {
             return CarMapper.INSTANCE.toCarDto(car);
         }
         throw new GeneralException("There is no such machine");
@@ -38,6 +42,7 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarDto saveCar(CarDto carDto) {
         Car car = CarMapper.INSTANCE.toCar(carDto);
+        car.setAction(Action.AVAILABLE);
         car = carRepository.save(car);
         return CarMapper.INSTANCE.toCarDto(car);
     }
@@ -96,7 +101,8 @@ public class CarServiceImpl implements CarService {
     public CarDto updateCar(Long id, CarDto carDto) {
         Car car = CarMapper.INSTANCE.toCar(carDto);
         if (carRepository.existsById(id)) {
-           Car car1 = carRepository.getById(id);
+            Car car1 = carRepository.getById(id);
+            car1.setAction(car.getAction());
             car1.setModel(car.getModel());
             car1.setCategory(car.getCategory());
             car1.setCarDescription(car.getCarDescription());
@@ -106,16 +112,22 @@ public class CarServiceImpl implements CarService {
             car1.setSeats(car.getSeats());
             carRepository.save(car1);
             return CarMapper.INSTANCE.toCarDto(car1);
-       }
+        }
         throw new GeneralException("Car not found");
     }
 
     @Override
     public List<CarDto> findByCategory(String categoryName) {
         List<Car> carList = carRepository.findByCarCategory(categoryName);
-        if (carList != null){
+        if (carList != null) {
             return CarMapper.INSTANCE.toCarDtoList(carList);
         }
         throw new GeneralException("This category was not found");
+    }
+
+    @Override
+    public List<CarDto> orderByCategory() {
+        List<Car> carList = carRepository.orderByCategory();
+        return CarMapper.INSTANCE.toCarDtoList(carList);
     }
 }

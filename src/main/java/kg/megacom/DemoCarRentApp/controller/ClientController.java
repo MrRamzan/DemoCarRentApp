@@ -1,11 +1,15 @@
 package kg.megacom.DemoCarRentApp.controller;
 
+import io.swagger.annotations.Api;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
 import kg.megacom.DemoCarRentApp.service.ClientService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static kg.megacom.DemoCarRentApp.config.Swagger2Config.CLIENT;
+
+@Api(tags = CLIENT)
 @RestController
 @RequestMapping("/api/v1/clients")
 public class ClientController {
@@ -42,17 +46,17 @@ public class ClientController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public int deleteClient (@PathVariable Long id) {
+    public int deleteClient(@PathVariable Long id) {
         return clientService.deleteClient(id);
     }
 
     @PutMapping("/update/{id}")
-    public ClientDto updateClient (@PathVariable Long id, @RequestBody ClientDto clientDto){
+    public ClientDto updateClient(@PathVariable Long id, @RequestBody ClientDto clientDto) {
         return clientService.update(id, clientDto);
     }
 
     @PutMapping("/activated/{id}")
-    public int activated (@PathVariable Long id) {
+    public int activated(@PathVariable Long id) {
         return clientService.activateClient(id);
     }
 }

@@ -28,8 +28,12 @@ public class Orders {
     private double totalSum;
 
     @ManyToOne
-    @JoinColumn(name = "id_location")
-    private Locations location;
+    @JoinColumn(name = "id_locationPickUp")
+    private Locations pickUpLocation;
+
+    @ManyToOne
+    @JoinColumn(name = "id_locationReturn")
+    private Locations returnLocation;
 
     @ManyToOne
     @JoinColumn(name = "id_cars", nullable = false)

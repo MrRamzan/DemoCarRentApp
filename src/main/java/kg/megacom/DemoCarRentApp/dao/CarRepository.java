@@ -24,4 +24,8 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     @Query(value = "SELECT * FROM Cars c INNER JOIN category ct ON ct.id = c.id_category WHERE ct.car_category = ?", nativeQuery = true)
     List<Car> findByCarCategory(String carCategory);
+
+    @Query(value = "SELECT * FROM cars cr ORDER BY cr.id_category", nativeQuery = true)
+    List<Car> orderByCategory();
+
 }

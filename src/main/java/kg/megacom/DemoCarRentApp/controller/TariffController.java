@@ -1,11 +1,15 @@
 package kg.megacom.DemoCarRentApp.controller;
 
+import io.swagger.annotations.Api;
 import kg.megacom.DemoCarRentApp.model.dto.TariffDto;
 import kg.megacom.DemoCarRentApp.service.TariffService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static kg.megacom.DemoCarRentApp.config.Swagger2Config.TARIFF;
+
+@Api(tags = TARIFF)
 @RestController
 @RequestMapping("/api/v1/tariff")
 public class TariffController {

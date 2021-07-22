@@ -1,11 +1,15 @@
 package kg.megacom.DemoCarRentApp.controller;
 
+import io.swagger.annotations.Api;
 import kg.megacom.DemoCarRentApp.model.dto.CarDescriptionDto;
 import kg.megacom.DemoCarRentApp.service.CarDescriptionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static kg.megacom.DemoCarRentApp.config.Swagger2Config.CARDESCRIPTION;
+
+@Api(tags = CARDESCRIPTION)
 @RestController
 @RequestMapping("/api/v1/description")
 public class CarDescriptionController {
