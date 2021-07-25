@@ -45,4 +45,9 @@ public class LocationController {
         return locationService.delete(id);
     }
 
+    @PutMapping("/activate/{id}")
+    public int activateLocation(@PathVariable Long id) {
+        return locationService.activate(id);
+    }
+
 }

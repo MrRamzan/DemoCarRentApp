@@ -21,15 +21,18 @@ public class Car {
     private Category category;
 
     private int year;
+    private String brand;
     private String model;
     private int doors;
     private int luggage;
     private int seats;
-    private Boolean activeStatus;
+    private String transmission;
+    private String fuel;
+    private String side;
+    private String typeOfDriver;
+    private Float fuelConsumption;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_car_description", nullable = false)
-    private CarDescription carDescription;
+    private Boolean activeStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_tariff", nullable = false)

@@ -37,7 +37,8 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationDto save(LocationDto locationDto) {
         Locations locations = LocationMapper.INSTANCE.toEntity(locationDto);
-        locations = locationRepository.save(locations);
+        locations.setActive(true);
+        locationRepository.save(locations);
         return LocationMapper.INSTANCE.toDto(locations);
     }
 
@@ -46,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
         if (locationRepository.existsById(id)) {
             Locations locations = locationRepository.getById(id);
             locations.setName(locationDto.getName());
-            locations = locationRepository.save(locations);
+            locationRepository.save(locations);
             return LocationMapper.INSTANCE.toDto(locations);
         }
         throw new GeneralException("Location was not updated");
@@ -56,7 +57,19 @@ public class LocationServiceImpl implements LocationService {
     public int delete(Long id) {
         if (locationRepository.existsById(id)) {
             Locations locations = locationRepository.getById(id);
-            locationRepository.delete(locations);
+            locations.setActive(false);
+            locationRepository.save(locations);
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public int activate(Long id) {
+        if (locationRepository.existsById(id)) {
+            Locations locations = locationRepository.getById(id);
+            locations.setActive(true);
+            locationRepository.save(locations);
             return 1;
         }
         return 0;

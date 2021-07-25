@@ -8,9 +8,8 @@ import java.util.Date;
 public class ClientDto {
 
     private Long id;
-    private String firstname;
-    private String lastname;
-    private String middlename;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private Date registrationDate;

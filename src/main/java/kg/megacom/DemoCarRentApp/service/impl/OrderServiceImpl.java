@@ -19,8 +19,6 @@ import kg.megacom.DemoCarRentApp.service.OrderService;
 import kg.megacom.DemoCarRentApp.service.TariffService;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -48,15 +46,15 @@ public class OrderServiceImpl implements OrderService {
         if (client == null && car.getAction() != Action.RENT) {
             // создаем нового клиента
             Client client1 = new Client();
-            client1.setFirstname(carData.getName());
-            client1.setLastname(carData.getLastName());
+            client1.setFirstName(carData.getName());
+            client1.setLastName(carData.getLastName());
             client1.setEmail(carData.getEmail());
             client1.setTelephone(carData.getTelephone());
             client1.setActiveStatus(true);
             client1.setRegistrationDate(new Date());
-            int rd = (int) (Math.random() * 10000);
-            String random = String.valueOf(rd);
-            client1.setPassword(random);
+            int randomPass = (int) (Math.random() * 10000);
+            String randomPassToString = String.valueOf(randomPass);
+            client1.setPassword(randomPassToString);
             ClientDto clientDto1 = clientService.saveClient(ClientMapper.INSTANCE.toClientDto(client1));
 
             // создаем новый заказ
@@ -69,31 +67,12 @@ public class OrderServiceImpl implements OrderService {
             //меняем статус авто на прокат
             car.setAction(Action.RENT);
             carService.updateCar(carData.getCarId(), carDto);
-
             orders.setComment(carData.getComment());
 
-            //  ******************* Parse Date *****************
-
-            try {
-                SimpleDateFormat dates = new SimpleDateFormat("MM/dd/yyyy");
-
-                //Setting dates
-                orders.setStart(new Date());
-                orders.setEnd(carData.getReturnDate());
-
-                String CurrentDate = dates.format(orders.getStart().getTime());
-                String FinalDate = dates.format(orders.getEnd().getTime());
-
-                Date date1 = dates.parse(CurrentDate);
-                Date date2 = dates.parse(FinalDate);
-
-                //Comparing dates
-                long difference = Math.abs(date1.getTime() - date2.getTime());
-                long differenceDates = difference / (24 * 60 * 60 * 1000);
-                orders.setTotalSum(car.getTariff().getPrice() * differenceDates);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            orders.setStart(new Date());
+            orders.setEnd(carData.getReturnDate());
+            double rentDay = (double) (orders.getEnd().getTime() - orders.getStart().getTime());
+            orders.setTotalSum(car.getTariff().getPrice() * rentDay);
 
             orders.setEnded(false);
             orders = orderRepository.save(orders);
@@ -104,35 +83,13 @@ public class OrderServiceImpl implements OrderService {
             orders.setCar(car);
             orders.setClient(client);
 
-            //  ******************* Parse Date *****************
-
-            try {
-                SimpleDateFormat dates = new SimpleDateFormat("MM/dd/yyyy");
-
-                //Setting dates
-                orders.setStart(new Date());
-                orders.setEnd(carData.getReturnDate());
-
-                String CurrentDate = dates.format(orders.getStart().getTime());
-                String FinalDate = dates.format(orders.getEnd().getTime());
-
-                Date date1 = dates.parse(CurrentDate);
-                Date date2 = dates.parse(FinalDate);
-
-                //Comparing dates
-                long difference = Math.abs(date1.getTime() - date2.getTime());
-                long differenceDates = difference / (24 * 60 * 60 * 1000);
-                orders.setTotalSum(car.getTariff().getPrice() * differenceDates);
-                System.out.println(differenceDates);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
             orders.setPickUpLocation(carData.getPickup());
             orders.setReturnLocation(carData.getReturnPlace());
             car.setAction(Action.RENT);
             carService.updateCar(carData.getCarId(), CarMapper.INSTANCE.toCarDto(car));
 
+            double rentDay = (double) (orders.getEnd().getTime() - orders.getStart().getTime());
+            orders.setTotalSum(car.getTariff().getPrice() * rentDay);
             orders.setComment(carData.getComment());
             orders.setEnded(false);
             orders = orderRepository.save(orders);

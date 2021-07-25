@@ -2,7 +2,10 @@ package kg.megacom.DemoCarRentApp.controller;
 
 import io.swagger.annotations.Api;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
+import kg.megacom.DemoCarRentApp.model.request.CarSearchRequestModel;
 import kg.megacom.DemoCarRentApp.service.CarService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +17,31 @@ import static kg.megacom.DemoCarRentApp.config.Swagger2Config.CAR;
 @RequestMapping(value = "/api/v1/cars")
 public class CarController {
 
+    private static final String ENDPOINT = "/car";
     private CarService carService;
 
     public CarController(CarService carService) {
         this.carService = carService;
+    }
+
+    @PostMapping("/save")
+    public CarDto saveCar(@RequestBody CarDto carDto) {
+        return carService.saveCar(carDto);
+    }
+
+    @PutMapping("/update/{id}")
+    public CarDto updateCar(@PathVariable Long id, @RequestBody CarDto carDto) {
+        return carService.updateCar(id, carDto);
+    }
+
+    @PutMapping("/activate/{id}")
+    public int activateCar(@PathVariable(value = "id") Long id) {
+        return carService.activateCar(id);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public int deleteCar(@PathVariable(value = "id") Long id) {
+        return carService.deleteCar(id);
     }
 
     @GetMapping("/findAll")
@@ -40,43 +64,10 @@ public class CarController {
         return carService.findByCategory(categoryName);
     }
 
-    @PostMapping("/save")
-    public CarDto saveCar(@RequestBody CarDto carDto) {
-        return carService.saveCar(carDto);
+    @PostMapping("/getByParam")
+    public ResponseEntity<List<CarDto>> searchCar(@RequestBody CarSearchRequestModel carSearchRequestModel) {
+        List<CarDto> persons = carService.searchCar(carSearchRequestModel);
+        return new ResponseEntity<List<CarDto>>(persons, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public int deleteCar(@PathVariable(value = "id") Long id) {
-        return carService.deleteCar(id);
-    }
-
-    @GetMapping("/getBySeatsCount")
-    public List<CarDto> carDtos(@RequestParam int seats) {
-        return carService.findBySeatsCount(seats);
-    }
-
-    @GetMapping("/getByLuggage")
-    public List<CarDto> getBYLuggageVolume(@RequestParam int luggage) {
-        return carService.findByLuggageVolume(luggage);
-    }
-
-    @GetMapping("/getByDoorsCount")
-    public List<CarDto> getByDoors(@RequestParam int doors) {
-        return carService.findByDoorsCount(doors);
-    }
-
-    @GetMapping("/getByTransmission")
-    public List<CarDto> getByTransmission(@RequestParam String transmission) {
-        return carService.findByTransmission(transmission);
-    }
-
-    @PutMapping("/activateCar/{id}")
-    public int activateCar(@PathVariable(value = "id") Long id) {
-        return carService.activateCar(id);
-    }
-
-    @PutMapping("/update/{id}")
-    public CarDto updateCar(@PathVariable Long id, @RequestBody CarDto carDto) {
-        return carService.updateCar(id, carDto);
-    }
 }

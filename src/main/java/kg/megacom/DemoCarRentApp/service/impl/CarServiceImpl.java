@@ -6,21 +6,27 @@ import kg.megacom.DemoCarRentApp.mappers.CarMapper;
 import kg.megacom.DemoCarRentApp.model.Action;
 import kg.megacom.DemoCarRentApp.model.Car;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
-import kg.megacom.DemoCarRentApp.service.CarDescriptionService;
+import kg.megacom.DemoCarRentApp.model.request.CarSearchRequestModel;
 import kg.megacom.DemoCarRentApp.service.CarService;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CarServiceImpl implements CarService {
 
     private CarRepository carRepository;
-    private CarDescriptionService carDescriptionService;
+    private EntityManager entityManager;
 
-    public CarServiceImpl(CarRepository carRepository, CarDescriptionService carDescriptionService) {
+    public CarServiceImpl(CarRepository carRepository, EntityManager entityManager) {
         this.carRepository = carRepository;
-        this.carDescriptionService = carDescriptionService;
+        this.entityManager = entityManager;
     }
 
     @Override
@@ -50,48 +56,20 @@ public class CarServiceImpl implements CarService {
     @Override
     public int deleteCar(Long id) {
         if (carRepository.existsById(id)) {
-            Car car1 = carRepository.getById(id);
-            car1.setActiveStatus(false);
-            carRepository.save(car1);
+            Car newCar = carRepository.getById(id);
+            newCar.setActiveStatus(false);
+            carRepository.save(newCar);
             return 1;
         }
         return 0;
     }
 
     @Override
-    public List<CarDto> findBySeatsCount(int seats) {
-        List<Car> carList = carRepository.findBySeatsCount(seats);
-        List<CarDto> carDtoList = CarMapper.INSTANCE.toCarDtoList(carList);
-        return carDtoList;
-    }
-
-    @Override
-    public List<CarDto> findByLuggageVolume(int luggage) {
-        List<Car> carList = carRepository.findByLuggageVolume(luggage);
-        List<CarDto> carDtoList = CarMapper.INSTANCE.toCarDtoList(carList);
-        return carDtoList;
-    }
-
-    @Override
-    public List<CarDto> findByDoorsCount(int doors) {
-        List<Car> cars = carRepository.findByDoorsCount(doors);
-        List<CarDto> carDtoList = CarMapper.INSTANCE.toCarDtoList(cars);
-        return carDtoList;
-    }
-
-    @Override
-    public List<CarDto> findByTransmission(String transmission) {
-        List<Car> cars = carRepository.findByTransmission(transmission);
-        List<CarDto> carDtoList = CarMapper.INSTANCE.toCarDtoList(cars);
-        return carDtoList;
-    }
-
-    @Override
     public int activateCar(Long id) {
         if (carRepository.existsById(id)) {
-            Car car1 = carRepository.getById(id);
-            car1.setActiveStatus(true);
-            carRepository.save(car1);
+            Car newCar = carRepository.getById(id);
+            newCar.setActiveStatus(true);
+            carRepository.save(newCar);
             return 1;
         }
         return 0;
@@ -101,17 +79,17 @@ public class CarServiceImpl implements CarService {
     public CarDto updateCar(Long id, CarDto carDto) {
         Car car = CarMapper.INSTANCE.toCar(carDto);
         if (carRepository.existsById(id)) {
-            Car car1 = carRepository.getById(id);
-            car1.setAction(car.getAction());
-            car1.setModel(car.getModel());
-            car1.setCategory(car.getCategory());
-            car1.setCarDescription(car.getCarDescription());
-            car1.setDoors(car.getDoors());
-            car1.setLuggage(car.getLuggage());
-            car1.setYear(car.getYear());
-            car1.setSeats(car.getSeats());
-            carRepository.save(car1);
-            return CarMapper.INSTANCE.toCarDto(car1);
+            Car newCar = carRepository.getById(id);
+            newCar.setAction(car.getAction());
+            newCar.setModel(car.getModel());
+            newCar.setCategory(car.getCategory());
+            newCar.setDoors(car.getDoors());
+            newCar.setTariff(car.getTariff());
+            newCar.setLuggage(car.getLuggage());
+            newCar.setYear(car.getYear());
+            newCar.setSeats(car.getSeats());
+            carRepository.save(newCar);
+            return CarMapper.INSTANCE.toCarDto(newCar);
         }
         throw new GeneralException("Car not found");
     }
@@ -130,4 +108,42 @@ public class CarServiceImpl implements CarService {
         List<Car> carList = carRepository.orderByCategory();
         return CarMapper.INSTANCE.toCarDtoList(carList);
     }
+
+    // Запрос по нескольким параметрам
+    @Override
+    public List<CarDto> searchCar(CarSearchRequestModel carSearchRequestModel) {
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Car> criteriaQuery = criteriaBuilder.createQuery(Car.class);
+        Root<Car> root = criteriaQuery.from(Car.class);
+
+        Integer doors = carSearchRequestModel.getDoors();
+        Integer seats = carSearchRequestModel.getSeats();
+        Integer luggage = carSearchRequestModel.getLuggage();
+        String transmission = carSearchRequestModel.getTransmission();
+
+        //  Добавляем критерии поиска для запроса используя CriteriaBuilder
+
+        List<Predicate> searchCriterias = new ArrayList<>();
+
+        if (doors != null && doors != 0) {
+            searchCriterias.add(criteriaBuilder.equal(root.get("doors"), doors));
+        }
+
+        if (seats != null && seats != 0) {
+            searchCriterias.add(criteriaBuilder.equal(root.get("seats"), seats));
+        }
+
+        if (luggage != null && luggage != 0) {
+            searchCriterias.add(criteriaBuilder.equal(root.get("luggage"), luggage));
+        }
+
+        if (transmission != null && !transmission.isEmpty()) {
+            searchCriterias.add(criteriaBuilder.like(root.get("transmission"), "%" + transmission + "%"));
+        }
+
+        criteriaQuery.select(root).where(criteriaBuilder.and(searchCriterias.toArray(new Predicate[searchCriterias.size()])));
+        return CarMapper.INSTANCE.toCarDtoList(entityManager.createQuery(criteriaQuery).getResultList());
+    }
+
 }

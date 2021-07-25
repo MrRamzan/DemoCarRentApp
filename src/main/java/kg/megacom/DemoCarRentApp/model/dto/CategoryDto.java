@@ -6,6 +6,6 @@ import lombok.Data;
 public class CategoryDto {
 
     private Long id;
-    private String carCategory;
+    private String category;
 
 }

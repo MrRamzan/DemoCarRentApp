@@ -16,4 +16,6 @@ public interface LocationService {
 
     int delete(Long id);
 
+    int activate (Long id);
+
 }

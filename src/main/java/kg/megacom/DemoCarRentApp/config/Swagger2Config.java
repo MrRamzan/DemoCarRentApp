@@ -22,7 +22,6 @@ public class Swagger2Config {
     public static final String TARIFF = "Тарифы";
     public static final String LOCATIONS = "Локация";
     public static final String CATEGORY = "Авто категории";
-    public static final String CARDESCRIPTION = "Описание авто";
 
     @Bean
     public Docket api() {
@@ -36,8 +35,8 @@ public class Swagger2Config {
                 .tags(new Tag(ORDERS, ""))
                 .tags(new Tag(TARIFF, ""))
                 .tags(new Tag(LOCATIONS, ""))
-                .tags(new Tag(CATEGORY, ""))
-                .tags(new Tag(CARDESCRIPTION, ""));
+                .tags(new Tag(CATEGORY, ""));
+
     }
 
     private ApiInfo apiEndPointsInfo() {

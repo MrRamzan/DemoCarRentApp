@@ -11,5 +11,4 @@ public class TariffDto {
     private double price;
     private Date priceStart;
     private Date priceEnd;
-    private CarDto car;
 }

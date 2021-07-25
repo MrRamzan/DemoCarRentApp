@@ -1,7 +1,7 @@
 package kg.megacom.DemoCarRentApp.service.impl;
 
 import kg.megacom.DemoCarRentApp.dao.TariffRepository;
-import kg.megacom.DemoCarRentApp.exceptions.TariffException;
+import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.TariffMapper;
 import kg.megacom.DemoCarRentApp.model.Tariff;
 import kg.megacom.DemoCarRentApp.model.dto.TariffDto;
@@ -31,7 +31,7 @@ public class TariffServiceImpl implements TariffService {
     public TariffDto findById(Long id) {
         Tariff tariff = tariffRepository.findById(id).orElse(null);
         if (tariff == null) {
-            throw new TariffException("Tariff was not found");
+            throw new GeneralException("Tariff was not found");
         }
         return TariffMapper.INSTANCE.toDto(tariff);
     }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Entity
@@ -17,15 +18,18 @@ public class Client {
     private Long id;
 
     @Column(name = "firstname")
-    private String firstname;
+    private String firstName;
 
     @Column(name = "lastname")
-    private String lastname;
+    private String lastName;
 
-    @Column(name = "middlename")
-    private String middlename;
-
+    @Email
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    @JsonIgnore
+    private String password;
 
     @Column(name = "registration")
     @JsonIgnore
@@ -33,10 +37,6 @@ public class Client {
 
     @Column(name = "telephone")
     private String telephone;
-
-    @Column(name = "password")
-    @JsonIgnore
-    private String password;
 
     @Column(name = "active_status")
     private Boolean activeStatus;

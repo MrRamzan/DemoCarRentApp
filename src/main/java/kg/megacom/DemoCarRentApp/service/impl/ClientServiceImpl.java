@@ -1,7 +1,7 @@
 package kg.megacom.DemoCarRentApp.service.impl;
 
 import kg.megacom.DemoCarRentApp.dao.ClientRepository;
-import kg.megacom.DemoCarRentApp.exceptions.ClientException;
+import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.ClientMapper;
 import kg.megacom.DemoCarRentApp.model.Client;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
@@ -40,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
         if (client != null) {
             return ClientMapper.INSTANCE.toClientDto(client);
         }
-        throw new ClientException("Client with this telephone was not found");
+        throw new GeneralException("Client with this telephone was not found");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDto saveClient(ClientDto clientDto) {
         Client client = ClientMapper.INSTANCE.toClient(clientDto);
-        client = clientRepository.save(client);
+        clientRepository.save(client);
         return ClientMapper.INSTANCE.toClientDto(client);
     }
 
@@ -71,11 +71,10 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto update(Long id, ClientDto clientDto) {
         Client client = clientRepository.findById(clientDto.getId()).orElse(null);
         if (client == null) {
-            throw new ClientException("Client with this ID was not found");
+            throw new GeneralException("Client with this ID was not found");
         }
-        client.setFirstname(clientDto.getFirstname());
-        client.setLastname(clientDto.getLastname());
-        client.setMiddlename(clientDto.getMiddlename());
+        client.setFirstName(clientDto.getFirstName());
+        client.setLastName(clientDto.getLastName());
         client.setEmail(clientDto.getEmail());
         client.setPassword(clientDto.getPassword());
         client.setTelephone(clientDto.getTelephone());

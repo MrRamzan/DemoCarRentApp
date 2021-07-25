@@ -12,7 +12,8 @@ public class OrderDto {
     private Date end;
     private Boolean ended;
     private double totalSum;
-    private LocationDto location;
+    private LocationDto pickUpLocation;
+    private LocationDto returnLocation;
     private CarDto car;
     private ClientDto client;
     private String comment;

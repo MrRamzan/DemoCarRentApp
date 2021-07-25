@@ -1,5 +1,6 @@
 package kg.megacom.DemoCarRentApp.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,17 +15,16 @@ public class Orders {
     private Long id;
 
     @Column(name = "timestampstart")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date start;
 
     @Column(name = "timestampend")
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
-    @Column(name = "ended")
     private Boolean ended;
-
-    @Column(name = "total_sum")
     private double totalSum;
 
     @ManyToOne
