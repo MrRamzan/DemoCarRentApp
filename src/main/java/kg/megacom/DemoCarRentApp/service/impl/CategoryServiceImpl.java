@@ -20,7 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> findAllCateg() {
+    public List<CategoryDto> findAll() {
         List<Category> categoryList = categoryRepository.findAll();
         return CategoryMapper.INSTANCE.toCategoryDtoList(categoryList);
     }
@@ -39,16 +39,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = CategoryMapper.INSTANCE.toCategory(categoryDto);
         category = categoryRepository.save(category);
         return CategoryMapper.INSTANCE.toCategoryDto(category);
-    }
-
-    @Override
-    public int delete(Long id) {
-        if (categoryRepository.existsById(id)) {
-            Category category = categoryRepository.getById(id);
-            categoryRepository.delete(category);
-            return 1;
-        }
-        return 0;
     }
 
     @Override

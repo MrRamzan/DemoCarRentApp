@@ -6,13 +6,11 @@ import java.util.List;
 
 public interface CategoryService {
 
-    List<CategoryDto> findAllCateg();
+    List<CategoryDto> findAll();
 
     CategoryDto findById(Long id);
 
     CategoryDto save(CategoryDto categoryDto);
-
-    int delete(Long id);
 
     CategoryDto update(Long id, CategoryDto categoryDto);
 }

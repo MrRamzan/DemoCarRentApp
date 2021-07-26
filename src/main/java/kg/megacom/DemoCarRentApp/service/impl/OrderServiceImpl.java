@@ -69,9 +69,10 @@ public class OrderServiceImpl implements OrderService {
             carService.updateCar(carData.getCarId(), carDto);
             orders.setComment(carData.getComment());
 
-            orders.setStart(new Date());
+            orders.setStart(carData.getPickUpDate());
             orders.setEnd(carData.getReturnDate());
-            double rentDay = (double) (orders.getEnd().getTime() - orders.getStart().getTime());
+            long rentDay = (orders.getEnd().getTime() - orders.getStart().getTime()) / (24 * 60 * 60 * 1000);
+            System.out.println(rentDay);
             orders.setTotalSum(car.getTariff().getPrice() * rentDay);
 
             orders.setEnded(false);
@@ -88,7 +89,10 @@ public class OrderServiceImpl implements OrderService {
             car.setAction(Action.RENT);
             carService.updateCar(carData.getCarId(), CarMapper.INSTANCE.toCarDto(car));
 
-            double rentDay = (double) (orders.getEnd().getTime() - orders.getStart().getTime());
+            orders.setStart(carData.getPickUpDate());
+            orders.setEnd(carData.getReturnDate());
+            long rentDay = (orders.getEnd().getTime() - orders.getStart().getTime()) / (24 * 60 * 60 * 1000);
+            System.out.println(rentDay);
             orders.setTotalSum(car.getTariff().getPrice() * rentDay);
             orders.setComment(carData.getComment());
             orders.setEnded(false);

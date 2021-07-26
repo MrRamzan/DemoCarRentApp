@@ -22,7 +22,7 @@ public class CategoryController {
 
     @GetMapping("/getAll")
     public List<CategoryDto> findAllCategory() {
-        return categoryService.findAllCateg();
+        return categoryService.findAll();
     }
 
     @GetMapping("/getById/{id}")
@@ -33,11 +33,6 @@ public class CategoryController {
     @PostMapping("/save")
     public CategoryDto saveNewCateg(@RequestBody CategoryDto categoryDto) {
         return categoryService.save(categoryDto);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public int deleteCateg(@PathVariable Long id) {
-        return categoryService.delete(id);
     }
 
     @PutMapping("/update/{id}")

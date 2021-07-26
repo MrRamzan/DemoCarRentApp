@@ -1,6 +1,7 @@
 package kg.megacom.DemoCarRentApp.controller;
 
 import io.swagger.annotations.Api;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
 import kg.megacom.DemoCarRentApp.service.ClientService;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public int deleteClient(@PathVariable Long id) {
+    public Response deleteClient(@PathVariable Long id) {
         return clientService.deleteClient(id);
     }
 
@@ -56,7 +57,7 @@ public class ClientController {
     }
 
     @PutMapping("/activated/{id}")
-    public int activated(@PathVariable Long id) {
+    public Response activated(@PathVariable Long id) {
         return clientService.activateClient(id);
     }
 }

@@ -4,6 +4,7 @@ import kg.megacom.DemoCarRentApp.dao.ClientRepository;
 import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.ClientMapper;
 import kg.megacom.DemoCarRentApp.model.Client;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
 import kg.megacom.DemoCarRentApp.service.ClientService;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
+    Response response = new Response();
 
     public ClientServiceImpl(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
@@ -51,20 +53,34 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto saveClient(ClientDto clientDto) {
-        Client client = ClientMapper.INSTANCE.toClient(clientDto);
-        clientRepository.save(client);
-        return ClientMapper.INSTANCE.toClientDto(client);
+        Client newClient = ClientMapper.INSTANCE.toClient(clientDto);
+        Client clientFromDB = clientRepository.getClientByEmail(clientDto.getEmail());
+
+        if (clientFromDB != null) {
+            throw new GeneralException("Client with this email exist");
+        }
+        clientRepository.save(newClient);
+        return ClientMapper.INSTANCE.toClientDto(newClient);
+
     }
 
     @Override
-    public int deleteClient(Long id) {
+    public Response deleteClient(Long id) {
         if (clientRepository.existsById(id)) {
-            Client client1 = clientRepository.getById(id);
-            client1.setActiveStatus(false);
-            clientRepository.save(client1);
-            return 1;
+            Client newClient = clientRepository.getById(id);
+            newClient.setActiveStatus(false);
+            clientRepository.save(newClient);
+
+            if (newClient.getActiveStatus().equals(false)) {
+                response.setCode(1);
+                response.setMessage("Клиент деактивирован");
+                return response;
+            }
+            response.setMessage("Клиент ны был деактивирован");
+            return response;
         }
-        return 0;
+        response.setMessage("Клиент не найден");
+        return response;
     }
 
     @Override
@@ -83,14 +99,22 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public int activateClient(Long id) {
+    public Response activateClient(Long id) {
         if (clientRepository.existsById(id)) {
-            Client client1 = clientRepository.getById(id);
-            client1.setActiveStatus(true);
-            clientRepository.save(client1);
-            return 1;
+            Client newClient = clientRepository.getById(id);
+            newClient.setActiveStatus(true);
+            clientRepository.save(newClient);
+
+            if (newClient.getActiveStatus().equals(true)) {
+                response.setCode(1);
+                response.setMessage("Клиент активирован");
+                return response;
+            }
+            response.setMessage("Клиент ны был активирован");
+            return response;
         }
-        return 0;
+        response.setMessage("Клиент не найден");
+        return response;
     }
 }
 

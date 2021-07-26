@@ -1,5 +1,6 @@
 package kg.megacom.DemoCarRentApp.service;
 
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.LocationDto;
 
 import java.util.List;
@@ -14,8 +15,8 @@ public interface LocationService {
 
     LocationDto update(Long id, LocationDto locationDto);
 
-    int delete(Long id);
+    Response delete(Long id);
 
-    int activate (Long id);
+    Response activate (Long id);
 
 }

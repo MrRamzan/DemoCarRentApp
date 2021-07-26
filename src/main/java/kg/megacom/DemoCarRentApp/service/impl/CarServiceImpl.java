@@ -5,6 +5,7 @@ import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.CarMapper;
 import kg.megacom.DemoCarRentApp.model.Action;
 import kg.megacom.DemoCarRentApp.model.Car;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
 import kg.megacom.DemoCarRentApp.model.request.CarSearchRequestModel;
 import kg.megacom.DemoCarRentApp.service.CarService;
@@ -23,6 +24,7 @@ public class CarServiceImpl implements CarService {
 
     private CarRepository carRepository;
     private EntityManager entityManager;
+    Response response = new Response();
 
     public CarServiceImpl(CarRepository carRepository, EntityManager entityManager) {
         this.carRepository = carRepository;
@@ -54,25 +56,43 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public int deleteCar(Long id) {
+    public Response deleteCar(Long id) {
         if (carRepository.existsById(id)) {
             Car newCar = carRepository.getById(id);
             newCar.setActiveStatus(false);
             carRepository.save(newCar);
-            return 1;
+
+            if (newCar.getActiveStatus().equals(true)) {
+                response.setCode(1);
+                response.setMessage("Автомобиль деактивирован");
+                return response;
+            }
+            response.setCode(0);
+            response.setMessage("Автомобиль не был деактивирован");
+            return response;
         }
-        return 0;
+        response.setMessage("Автомобиль не найден");
+        return response;
     }
 
     @Override
-    public int activateCar(Long id) {
+    public Response activateCar(Long id) {
         if (carRepository.existsById(id)) {
             Car newCar = carRepository.getById(id);
             newCar.setActiveStatus(true);
             carRepository.save(newCar);
-            return 1;
+
+            if (newCar.getActiveStatus().equals(true)) {
+                response.setCode(1);
+                response.setMessage("Автомобиль активирован");
+                return response;
+            }
+            response.setCode(0);
+            response.setMessage("Автомобиль неактивирован");
+            return response;
         }
-        return 0;
+        response.setMessage("Автомобиль не найден");
+        return response;
     }
 
     @Override

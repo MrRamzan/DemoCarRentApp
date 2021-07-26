@@ -1,5 +1,6 @@
 package kg.megacom.DemoCarRentApp.service;
 
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.TariffDto;
 
 import java.util.List;
@@ -14,5 +15,5 @@ public interface TariffService {
 
     TariffDto update(Long id, TariffDto tariffDto);
 
-    int delete(Long id);
+    Response delete(Long id);
 }

@@ -1,6 +1,7 @@
 package kg.megacom.DemoCarRentApp.controller;
 
 import io.swagger.annotations.Api;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.CarDto;
 import kg.megacom.DemoCarRentApp.model.request.CarSearchRequestModel;
 import kg.megacom.DemoCarRentApp.service.CarService;
@@ -35,12 +36,12 @@ public class CarController {
     }
 
     @PutMapping("/activate/{id}")
-    public int activateCar(@PathVariable(value = "id") Long id) {
+    public Response activateCar(@PathVariable(value = "id") Long id) {
         return carService.activateCar(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public int deleteCar(@PathVariable(value = "id") Long id) {
+    public Response deleteCar(@PathVariable(value = "id") Long id) {
         return carService.deleteCar(id);
     }
 

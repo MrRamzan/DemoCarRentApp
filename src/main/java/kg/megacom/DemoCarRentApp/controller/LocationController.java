@@ -1,6 +1,7 @@
 package kg.megacom.DemoCarRentApp.controller;
 
 import io.swagger.annotations.Api;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.LocationDto;
 import kg.megacom.DemoCarRentApp.service.LocationService;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +42,12 @@ public class LocationController {
     }
 
     @DeleteMapping("delete/{id}")
-    public int delete(@PathVariable Long id) {
+    public Response delete(@PathVariable Long id) {
         return locationService.delete(id);
     }
 
     @PutMapping("/activate/{id}")
-    public int activateLocation(@PathVariable Long id) {
+    public Response activateLocation(@PathVariable Long id) {
         return locationService.activate(id);
     }
 

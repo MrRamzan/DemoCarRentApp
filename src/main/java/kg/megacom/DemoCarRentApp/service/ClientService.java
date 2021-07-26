@@ -1,5 +1,6 @@
 package kg.megacom.DemoCarRentApp.service;
 
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.ClientDto;
 
 import java.util.List;
@@ -16,10 +17,10 @@ public interface ClientService {
 
     ClientDto saveClient(ClientDto clientDto);
 
-    int deleteClient(Long id);
+    Response deleteClient(Long id);
 
     ClientDto update(Long id, ClientDto clientDto);
 
-    int activateClient(Long id);
+    Response activateClient(Long id);
 
 }

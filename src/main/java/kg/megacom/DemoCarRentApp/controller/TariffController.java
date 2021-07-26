@@ -1,6 +1,7 @@
 package kg.megacom.DemoCarRentApp.controller;
 
 import io.swagger.annotations.Api;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.TariffDto;
 import kg.megacom.DemoCarRentApp.service.TariffService;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class TariffController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public int deleteTariff(@PathVariable Long id) {
+    public Response deleteTariff(@PathVariable Long id) {
         return tariffService.delete(id);
     }
 }

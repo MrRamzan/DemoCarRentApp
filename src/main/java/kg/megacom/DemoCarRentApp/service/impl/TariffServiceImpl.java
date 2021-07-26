@@ -4,6 +4,7 @@ import kg.megacom.DemoCarRentApp.dao.TariffRepository;
 import kg.megacom.DemoCarRentApp.exceptions.GeneralException;
 import kg.megacom.DemoCarRentApp.mappers.TariffMapper;
 import kg.megacom.DemoCarRentApp.model.Tariff;
+import kg.megacom.DemoCarRentApp.model.android.Response;
 import kg.megacom.DemoCarRentApp.model.dto.TariffDto;
 import kg.megacom.DemoCarRentApp.service.TariffService;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TariffServiceImpl implements TariffService {
 
     private TariffRepository tariffRepository;
+    Response response = new Response();
 
     public TariffServiceImpl(TariffRepository tariffRepository) {
         this.tariffRepository = tariffRepository;
@@ -75,12 +77,17 @@ public class TariffServiceImpl implements TariffService {
     }
 
     @Override
-    public int delete(Long id) {
+    public Response delete(Long id) {
         if (tariffRepository.existsById(id)) {
             Tariff tariff = tariffRepository.getById(id);
             tariffRepository.delete(tariff);
-            return 1;
+            response.setCode(1);
+            response.setMessage(" Тариф успешно удален ");
+            return response;
+
         }
-        return 0;
+        response.setCode(0);
+        response.setMessage("Тариф под таким ID не найден, повторите попытку ");
+        return response;
     }
 }
